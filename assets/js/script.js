@@ -7,3 +7,17 @@
 var timerEl = document.getElementById('timer');
 var quizEl = document.getElementById('quiz');
 
+function timer() {
+    var timeRemaining = 60;
+
+    var timeInterval = setInterval(function() {
+        timerEl.textContent = "Time Remaining: " + timeRemaining;
+        timeRemaining--;
+        if (timeRemaining < 0) {
+            clearInterval(timeInterval);
+            timerEl.textContent = "Time's up!";
+            // endQuiz();
+        }
+    }, 1000);
+};
+
