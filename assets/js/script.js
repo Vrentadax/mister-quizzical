@@ -40,17 +40,23 @@ function timer() {
 function answerButtonHandler(event) {
     var targetEl = event.target;
     var result = document.createElement("div");
-    console.log(targetEl);
+    // console.log(targetEl);
 
     if (targetEl.matches(".start-btn")) {
         console.log(".start-btn pressed");
         timer();
+        clearCard();
+        theQuiz();
+    
     }
     else if (targetEl.matches(".Green") || 
     targetEl.matches(".Xbox")) {
         console.log("Correct!");
         result.innerHTML = "<h4 class=result>Correct!</h4>";
         resultEl.appendChild(result);
+        clearCard();
+        theQuiz();
+    
     }
     else if (targetEl.matches(".Black") || 
     targetEl.matches(".Purple") || 
@@ -58,12 +64,14 @@ function answerButtonHandler(event) {
     targetEl.matches(".Nintendo")) {
         console.log("Wrong!");
         timeRemaining -= 10;
+        console.log(timeRemaining);
         result.innerHTML = "<h4 class=result>Wrong!</h4>";
         resultEl.appendChild(result);
-    }
+        clearCard();
+        theQuiz();
     
-    clearCard();
-    theQuiz();
+    }
+
 };
 
 function clearCard() {
