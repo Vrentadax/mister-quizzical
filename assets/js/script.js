@@ -5,9 +5,12 @@
 // function to save hs - second script for loading hs.html scores?
 
 var timeRemaining = 60;
+var questionNumber = 0;
+var timeInterval;
 
 var timerEl = document.getElementById('timer');
 var quizEl = document.getElementById('quiz');
+var resultEl = document.getElementById('result');
 
 
 var questionsObj = [
@@ -23,7 +26,7 @@ var questionsObj = [
 var highscore = [];
 
 function timer() {
-    var timeInterval = setInterval(function() {
+    timeInterval = setInterval(function () {
         timerEl.textContent = "Time Remaining: " + timeRemaining;
         timeRemaining--;
         if (timeRemaining < 0) {
@@ -36,19 +39,31 @@ function timer() {
 
 function answerButtonHandler(event) {
     var targetEl = event.target;
+    var result = document.createElement("div");
     console.log(targetEl);
 
     if (targetEl.matches(".start-btn")) {
+        console.log(".start-btn pressed");
         timer();
-        clearCard();
-        theQuiz();
     }
-    else if (targetEl.matches(".Green" || ".Xbox")) {
-        // return true;
+    else if (targetEl.matches(".Green") || 
+    targetEl.matches(".Xbox")) {
+        console.log("Correct!");
+        result.innerHTML = "<h4 class=result>Correct!</h4>";
+        resultEl.appendChild(result);
     }
-    else if (targetEl.matches(!".Green" || !".Xbox")) {
-        // return false;
+    else if (targetEl.matches(".Black") || 
+    targetEl.matches(".Purple") || 
+    targetEl.matches(".Playstation") ||
+    targetEl.matches(".Nintendo")) {
+        console.log("Wrong!");
+        timeRemaining -= 10;
+        result.innerHTML = "<h4 class=result>Wrong!</h4>";
+        resultEl.appendChild(result);
     }
+    
+    clearCard();
+    theQuiz();
 };
 
 function clearCard() {
@@ -63,8 +78,8 @@ function startQuiz() {
     var cardContainerEl = document.createElement("div");
     cardContainerEl.className = "quiz-card";
 
-    cardContainerEl.innerHTML = 
-    "<h3 class='welcome'>'Welcome!'</h3><br><p>'Ready to test your knowlege? Click the start button and let's find out!</p>";
+    cardContainerEl.innerHTML =
+        "<h3 class='welcome'>'Welcome!'</h3><br><p>'Ready to test your knowlege? Click the start button and let's find out!</p>";
 
     var startButtonEl = document.createElement("button");
     startButtonEl.textContent = "Start!";
@@ -75,31 +90,36 @@ function startQuiz() {
 };
 
 function theQuiz() {
-    for (var i = 0; i < questionsObj.length; i++) {
-        console.log("Question #" + i);
+
+    if (questionNumber >= questionsObj.length) {
+        endQuiz();
+    }
+    else {
+        console.log("Question #" + questionNumber);
 
         var cardContainerEl = document.createElement("div");
         cardContainerEl.className = "quiz-card";
-        
-        cardContainerEl.innerHTML = 
-        "<h3 class='question'>" + questionsObj[i].question + "</h3>";
+
+        cardContainerEl.innerHTML =
+            "<h3 class='question'>" + questionsObj[questionNumber].question + "</h3>";
 
         quizEl.appendChild(cardContainerEl);
 
-        for (var a = 0; a < questionsObj[i].answers.length; a++) {
+        for (var a = 0; a < questionsObj[questionNumber].answers.length; a++) {
             var answerButtonEl = document.createElement("button");
-            answerButtonEl.textContent = questionsObj[i].answers[a];
-            answerButtonEl.className = "btn " + questionsObj[i].answers[a];
+            answerButtonEl.textContent = questionsObj[questionNumber].answers[a];
+            answerButtonEl.className = "btn " + questionsObj[questionNumber].answers[a];
             cardContainerEl.appendChild(answerButtonEl);
         }
+
+        questionNumber++;
     }
-    // console.log("Wrong!");
-    // timeRemaining -= 20;
+
 };
 
 function endQuiz() {
-    clearCard();
     console.log("Game Over!");
+    clearInterval(timeInterval);
 };
 
 function saveHighscore() {
