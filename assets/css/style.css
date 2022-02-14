@@ -1,7 +1,93 @@
+/* universal */
 * {
     box-sizing: border-box;
 }
 
 :root {
-    primary: #8400ff;
+    --primary: #8400ff;
+    --primary-hover: #a94efd;
+    --secondary: black;
+}
+
+/* type */
+header {
+    background: var(--primary);
+    padding: 30px 25px;
+    border: 5px solid var(--secondary);
+    text-align: center;
+    font-size: 1.5rem;
+}
+
+form {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+form input {
+    outline: none;
+    border: none;
+    text-align: center;
+    padding: 12px;
+    width: 100%;
+    font-size: 2.2rem;
+    border: 2px solid var(--secondary);
+    border-radius: 12px;
+}
+
+p {
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+/* class */
+.result.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.result {
+    margin: 30px auto;
+    font-size: 1.5rem;
+    border-top: 2px solid var(--secondary);
+    width: 60%;
+    text-align: center;
+}
+
+
+.question {
+    text-align: center;
+    font-size: 2.5rem;
+    border-bottom: 2px solid var(--secondary);
+}
+
+.quiz-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.highscore {
+    font-size: 1.5rem;
+}
+
+.btn {
+    outline: none;
+    border: 2px solid var(--secondary);
+    display: flex;
+    flex: 100%;
+    padding: 5px 25px;
+    background: var(--primary);
+    font-size: 2rem;
+    margin-top: 10px;
+    border-radius: 12px;
+    justify-content: space-between;
+    align-items: center;
+    top: -3px;
+    box-shadow: 0 3px grey;
+}
+  
+.btn:hover {
+    background: var(--primary-hover);
 }

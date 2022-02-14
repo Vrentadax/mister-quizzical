@@ -1,3 +1,4 @@
+// global vars
 var timeRemaining = 60;
 var questionNumber = 0;
 var timeInterval;
@@ -28,21 +29,25 @@ var questionsObj = [
     }
 ];
 
+// timer function counting down from 60-0
 function timer() {
     timeInterval = setInterval(function () {
         timerEl.textContent = "Time Remaining: " + timeRemaining;
         timeRemaining--;
-        if (timeRemaining < 0) {
+        // if time reaches 0 clear 'card' and end the game
+        if (timeRemaining === 0) {
             clearInterval(timeInterval);
-            timerEl.textContent = "Time's up!";
+            clearCard();
             endQuiz();
         }
     }, 1000);
 };
 
+// click handler, checking which buttons are clicked and acts accordingly
 function answerButtonHandler(event) {
     var targetEl = event.target;
     var result = document.createElement("div");
+    result.className = "result-wrapper";
     result.innerHTML = "<h4 class=result>''</h4>";
     resultEl.appendChild(result);
     // console.log(targetEl);
@@ -54,6 +59,7 @@ function answerButtonHandler(event) {
         resultRefresh.remove();
     }
 
+    // start button function
     if (targetEl.matches(".start-btn")) {
         console.log(".start-btn pressed");
 
@@ -62,9 +68,11 @@ function answerButtonHandler(event) {
         theQuiz();
 
     }
+    // highscore button function
     else if (targetEl.matches(".highscore-btn")) {
         loadHighscore();
     }
+    // correct answer buttons
     else if (targetEl.matches(".Alerts") ||
         targetEl.matches(".Quotes") ||
         targetEl.matches(".Var") ||
@@ -76,6 +84,7 @@ function answerButtonHandler(event) {
         theQuiz();
 
     }
+    // wrong answer buttons
     else if (targetEl.matches(".Strings") ||
         targetEl.matches(".Booleans") ||
         targetEl.matches(".Parenthesis") ||
@@ -93,6 +102,7 @@ function answerButtonHandler(event) {
         theQuiz();
 
     }
+    // submit highscore function
     else if (targetEl.matches(".save-initials")) {
         var initialsInput = document.querySelector("input[name='initials'").value;
 
@@ -104,10 +114,12 @@ function answerButtonHandler(event) {
         localStorage.setItem("highscore", JSON.stringify(highscore));
         loadHighscore();
     }
+    // highscore page return button (to start page)
     else if (targetEl.matches(".return-btn")) {
         clearCard();
         startQuiz();
     }
+    // clear highscore button, clears array and saves empty array
     else if (targetEl.matches(".clear-btn")) {
         highscore = [];
         localStorage.setItem("highscore", JSON.stringify(highscore));
@@ -115,6 +127,7 @@ function answerButtonHandler(event) {
     }
 };
 
+// clears the created 'card' so it can be replaced by the next 'screen/card'
 function clearCard() {
     var cardSelect = document.querySelector(
         ".quiz-card"
@@ -122,6 +135,7 @@ function clearCard() {
     cardSelect.remove();
 };
 
+// checks at page load if there are scores and transfers any previous scores to the array for maintaining old scores with new ones
 function initialize() {
     // debugger
     highscore = [];
@@ -136,6 +150,7 @@ function initialize() {
     startQuiz();
 };
 
+// resets timer/questions (if being replayed), builds 'start' card
 function startQuiz() {
     console.log("Start!");
     timeRemaining = 60;
@@ -146,12 +161,14 @@ function startQuiz() {
     cardContainerEl.className = "quiz-card";
 
     cardContainerEl.innerHTML =
-        "<h3 class='welcome'>'Welcome!'</h3><br><p>'Ready to test your knowlege? Click the start button and let's find out!</p>";
+        "<h3 class='question'>Welcome!</h3><br><p>Ready to test your knowlege? Click the start button and let's find out!</p>";
 
+    // create button for click handler to listen for click to start questions/timer
     var startButtonEl = document.createElement("button");
     startButtonEl.textContent = "Start!";
     startButtonEl.className = "btn start-btn";
 
+    // create button for click handler to listen for click to clear 'screen' and pull up highscores
     var highscoreButtonEl = document.createElement("button");
     highscoreButtonEl.textContent = "Highscores";
     highscoreButtonEl.className = "btn highscore-btn";
@@ -161,14 +178,17 @@ function startQuiz() {
     cardContainerEl.appendChild(highscoreButtonEl);
 };
 
+// function to cycle through question 'cards'
 function theQuiz() {
-
+    
+    // checks if there are remaining questions: true = next question; false = end the game
     if (questionNumber >= questionsObj.length) {
         endQuiz();
     }
     else {
         console.log("Question #" + questionNumber);
 
+        // creates the question
         var cardContainerEl = document.createElement("div");
         cardContainerEl.className = "quiz-card";
 
@@ -177,6 +197,7 @@ function theQuiz() {
 
         quizEl.appendChild(cardContainerEl);
 
+        // cycles through answer array to create cooresponding buttons
         for (var a = 0; a < questionsObj[questionNumber].answers.length; a++) {
             var answerButtonEl = document.createElement("button");
             answerButtonEl.textContent = questionsObj[questionNumber].answers[a];
@@ -184,11 +205,13 @@ function theQuiz() {
             cardContainerEl.appendChild(answerButtonEl);
         }
 
+        // increase var so next call will be next question
         questionNumber++;
     }
 
 };
 
+// function to resolve a 'game over' (timer expiration/no more questions)
 function endQuiz() {
     console.log("Game Over!");
     clearInterval(timeInterval);
@@ -199,13 +222,15 @@ function endQuiz() {
     var cardContainerEl = document.createElement("div");
     cardContainerEl.className = "quiz-card";
 
+    // creates end message, form to enter initials, and button to submit as a 'card'
     cardContainerEl.innerHTML =
-        "<h3 class='question'>Game Over!</h3><br><p>You finished with a score of " + timeRemaining + "!</p><br><input type='text' name='initials' placeholder='Enter Your Initials!'><br><button class='btn save-initials' type='submit'>Submit!</button>";
+        "<h3 class='question'>Game Over!</h3><br><p>You finished with a score of " + timeRemaining + "!</p><br><form><input type='text' name='initials' placeholder='Enter Your Initials!'><br><button class='btn save-initials' type='submit'>Submit!</button></form>";
 
     quizEl.appendChild(cardContainerEl);
 
 };
 
+// creates the highscore 'card' to display
 function loadHighscore() {
     clearCard();
 
@@ -246,8 +271,9 @@ function loadHighscore() {
     for (var i = 0; i < savedHighscore.length; i++) {
         // create card to display scores
         var cardLiEl = document.createElement("li");
+        cardLiEl.className = "highscore";
         cardLiEl.innerHTML =
-            "<h3 class='highscore'>" + savedHighscore[i].initials + '  ||  ' + savedHighscore[i].time + "</h3>";
+            "<h3>" + savedHighscore[i].initials + '  ||  ' + savedHighscore[i].time + "</h3>";
 
         cardListEl.appendChild(cardLiEl);
     }
@@ -255,6 +281,8 @@ function loadHighscore() {
     cardContainerEl.appendChild(clearHighscoreEl);
 };
 
+// event listener for handler to function and react
 quizEl.addEventListener("click", answerButtonHandler);
 
+// let's gooooooooo!
 initialize();
