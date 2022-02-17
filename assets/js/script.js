@@ -121,6 +121,7 @@ function answerButtonHandler(event) {
     }
     // clear highscore button, clears array and saves empty array
     else if (targetEl.matches(".clear-btn")) {
+        highscore = [];
         localStorage.removeItem("highscore");
         loadHighscore();
     }
