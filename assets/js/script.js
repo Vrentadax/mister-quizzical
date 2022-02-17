@@ -95,6 +95,9 @@ function answerButtonHandler(event) {
         targetEl.matches(".clearInterval")) {
         console.log("Wrong!");
         timeRemaining -= 10;
+        if (timeRemaining < 0) {
+            timeRemaining = 0;
+        }
         console.log(timeRemaining);
         result.innerHTML = "<h4 class=result>Wrong!</h4>";
         resultEl.appendChild(result);
