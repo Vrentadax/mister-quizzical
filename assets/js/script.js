@@ -48,12 +48,12 @@ function answerButtonHandler(event) {
     var targetEl = event.target;
     var result = document.createElement("div");
     result.className = "result-wrapper";
-    result.innerHTML = "<h4 class=result>''</h4>";
+    result.innerHTML = "<h4 class=result></h4>";
     resultEl.appendChild(result);
     // console.log(targetEl);
 
     var resultRefresh = document.querySelector(
-        ".result"
+        ".result-wrapper"
     );
     if (resultRefresh) {
         resultRefresh.remove();
@@ -121,8 +121,7 @@ function answerButtonHandler(event) {
     }
     // clear highscore button, clears array and saves empty array
     else if (targetEl.matches(".clear-btn")) {
-        highscore = [];
-        localStorage.setItem("highscore", JSON.stringify(highscore));
+        localStorage.removeItem("highscore");
         loadHighscore();
     }
 };
@@ -139,16 +138,17 @@ function clearCard() {
 function initialize() {
     // debugger
     if (!highscore) {
-        highscore = [];
+    highscore = [];
     }
     else {
-        var savedHighscore = localStorage.getItem("highscore");
-        savedHighscore = JSON.parse(savedHighscore);
+    var savedHighscore = localStorage.getItem("highscore");
+    savedHighscore = JSON.parse(savedHighscore);
 
-        for (var i = 0; i < savedHighscore.length; i++) {
+    for (var i = 0; i < savedHighscore.length; i++) {
         highscore.push(savedHighscore[i]);
-        }
     }
+}
+
 
     startQuiz();
 };
@@ -219,7 +219,12 @@ function endQuiz() {
     console.log("Game Over!");
     clearInterval(timeInterval);
     timerEl.textContent = "Time Remaining: " + timeRemaining;
-    resultEl.remove();
+    var resultRefresh = document.querySelector(
+        ".result-wrapper"
+    );
+    if (resultRefresh) {
+        resultRefresh.remove();
+    }
 
 
     var cardContainerEl = document.createElement("div");
