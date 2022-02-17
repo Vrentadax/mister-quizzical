@@ -138,7 +138,10 @@ function clearCard() {
 // checks at page load if there are scores and transfers any previous scores to the array for maintaining old scores with new ones
 function initialize() {
     // debugger
-    if (highscore) {
+    if (!highscore) {
+        highscore = [];
+    }
+    else {
         var savedHighscore = localStorage.getItem("highscore");
         savedHighscore = JSON.parse(savedHighscore);
 
